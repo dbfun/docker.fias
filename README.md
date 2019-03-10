@@ -36,4 +36,5 @@ mysql --port=9306 --host=127.0.0.1
 SELECT * FROM fias_main WHERE MATCH('толст*');
 SELECT * FROM fias_main WHERE MATCH('*хина*');
 CALL SUGGEST('толстго', 'fias_main');
+CALL SUGGEST('абдурахманово', 'fias_main');
 ```

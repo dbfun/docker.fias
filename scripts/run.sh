@@ -8,17 +8,11 @@ function gracefulShutdown {
   kill "$php_pid"
 }
 
-function indexOnce {
-  if [ -d "/src" ]; then
-    indexer --all --config "$SPHINX_CONFIG"
-  fi
-}
-
 trap gracefulShutdown SIGINT SIGTERM
 
-indexOnce
+/scripts/reindex.sh
 
-/usr/bin/searchd -c "$SPHINX_CONFIG" &
+/usr/bin/searchd -c "$SPHINX_CONFIG"
 
 php-fpm & php_pid="$!"
 
