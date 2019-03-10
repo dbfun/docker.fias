@@ -1,0 +1,9 @@
+{
+    "name": "required/fias",
+    "description": "ФИАС в Docker контейнере",
+    "type": "project",
+    "autoload": {
+        "psr-4": {"App\\": "app/"}
+    },
+    "require": {}
+}

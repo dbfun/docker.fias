@@ -1,7 +1,5 @@
 #!/bin/sh
 
-SPHINX_CONFIG=/scripts/sphinx.conf
-
 set -x
 
 function gracefulShutdown {
@@ -10,18 +8,18 @@ function gracefulShutdown {
   kill "$php_pid"
 }
 
-function index {
-  ls /var/sphinx/fias_main.*
-  if [ $? -ne 0 ]; then
+function indexOnce {
+  if [ -d "/src" ]; then
     indexer --all --config "$SPHINX_CONFIG"
   fi
 }
 
 trap gracefulShutdown SIGINT SIGTERM
 
-index
+indexOnce
 
 /usr/bin/searchd -c "$SPHINX_CONFIG" &
+
 php-fpm & php_pid="$!"
 
 wait

@@ -1,12 +1,16 @@
 <?php
 
-class SphinxXml2Pipe {
+namespace App;
 
+require __DIR__ . '/../vendor/autoload.php';
+
+class Xmlpipe2 {
 
   public function __construct()
   {
     // Файл с адресами
-    $this->reader = XMLReader::open('/tmp/src/AS_ADDROBJ_20190303_769b2e2b-691b-422e-8328-5dc87ab03991.XML');
+    $srcFile = \App\Fs\File::locateOne('/src/*ADDROBJ*.XML');
+    $this->reader = \XMLReader::open($srcFile);
   }
 
   public function run()
@@ -21,7 +25,7 @@ class SphinxXml2Pipe {
       $this->docID++;
       $this->putXmlDoc();
       fwrite(STDOUT, $this->xml->flush(true)); // против переполнения памяти
-      // if($this->docID >= 10000) break; // TEST CASE
+      if($this->docID >= 10000) break; // TEST CASE
     }
 
     $this->endXml();
@@ -33,7 +37,7 @@ class SphinxXml2Pipe {
     $reader =& $this->reader;
     while ($reader->read()) {
 
-      if($reader->nodeType !== XMLReader::ELEMENT) {
+      if($reader->nodeType !== \XMLReader::ELEMENT) {
         continue;
       }
 
@@ -90,7 +94,7 @@ class SphinxXml2Pipe {
   private $xml;
   private function startXml()
   {
-    $this->xml = new XmlWriter();
+    $this->xml = new \XmlWriter();
 
     $this->xml->openMemory();
     $this->xml->setIndent(true);
@@ -161,5 +165,5 @@ class SphinxXml2Pipe {
 }
 
 
-$pipe = new SphinxXml2Pipe();
+$pipe = new Xmlpipe2();
 $pipe->run();
